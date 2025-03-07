@@ -49,7 +49,10 @@ Compiladores modernos ajudam a manipular essa estrutura rígida, oferecendo conf
 
 Todo programa COBOL é dividido em quatro **divisões**, que são organizadas em **seções**, compostas por **parágrafos**, que contêm pelo menos uma **sentença**. Todos os nomes de divisão, seção e parágrafo devem terminar com um ponto (`.`).  
 
-<img src="C:\Users\maria\Pictures\Screenshots\Captura de tela 2025-03-07 184231.png" alt="Exemplo da estrutura de COBOL" width="500">
+<p align="center">
+  <img src="https://github.com/claraneves23/programacao_mainframe/blob/main/Captura%20de%20tela%202025-03-07%20184231.png?raw=true" alt="Exemplo de Estrutura do COBOL">
+</p>
+
 
 ### Literais e Constantes Figurativas  
 
