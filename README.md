@@ -345,3 +345,34 @@ WORKING-STORAGE SECTION
 - A constante figurativa ZEROS é autoexplicativa: indica que queremos que as variáveis sejam iniciadas com valor zero.
 - Para variáveis alfanuméricas normalmente usamos a constante figurativa
 SPACES, que preenche a variável com espaços em branco.
+
+## Aula 04
+### Procedure Division
+#### Parágrafos e sentenças
+- PROCEDURE DIVISION, é onde ficam as instruções que serão executadas pelo programa. Toda a lógica programação estará nessas instruções.
+- Toda sentença começa com um verbo em inglês: READ, MOVE, WRITE, ADD… , a única exceção para essa regra é a instrução que usamos para testar condições (IF).
+- Os nomes dos parágrafos devem ser codificados a partir da coluna 8 (área A) e terminar obrigatoriamente com um ponto. 
+- As sentenças devem ser codificadas a partir da coluna 12 (área B).
+- Apenas a última sentença de um parágrafo precisa de um ponto final.
+- A PROCEDURE DIVISION começa imediatamente depois da WORKINGSTORAGE SECTION, e como todas as divisões ela deve ser declarada a partir da coluna 8.
+#### Abertura de arquivos
+- Todo arquivo precisa ser “aberto” pelo programa para que possamos ler ou gravar registros nele. Qualquer operação de leitura ou escrita de registros num arquivo que não foi previamente aberto provocará um erro de execução que será sinalizado no file status correspondente.  A abertura de arquivos é comandada pela instrução OPEN, que tem o seguinte formato:
+'''
+OPEN modo nome-do-arquivo
+'''
+- O operador “modo” informa se vamos acessar o arquivo para leitura (INPUT) ou gravação (OUTPUT).
+- O “nome do arquivo” que aparece no comando OPEN deve ser igual ao nome informado na cláusula FD da FILE SECTION.
+- Existem outros modos possíveis nesse comando.
+- OPEN I-O: abre um arquivo para leitura e gravação; esse é o modo que nos permite, por exemplo, atualizar (REWRITE) os registros de um arquivo.
+-  OPEN EXTEND nos permite inserir registros no final de um arquivo já existente.
+- É importante notar que OPEN I-O e OPEN EXTEND preservam o conteúdo existente no arquivo.
+- Já OPEN OUTPUT apaga todo o conteúdo existente e prepara o arquivo para a gravação de novos registros.
+- O COBOL permite que um único comando OPEN seja usado para abrir vários arquivos de leitura e gravação ao mesmo tempo:
+'''
+OPEN INPUT arquivo1 arquivo2 arquivo3 //(leitura)
+     OUTPUT arquivo4 arquivo5 arquivo6 //(gravacao)
+     I-O  arquivo6 arquivo7 arquivo8 // leitura e gravacao
+
+
+
+'''
