@@ -347,32 +347,140 @@ WORKING-STORAGE SECTION
 SPACES, que preenche a variável com espaços em branco.
 
 ## Aula 04
-### Procedure Division
-#### Parágrafos e sentenças
-- PROCEDURE DIVISION, é onde ficam as instruções que serão executadas pelo programa. Toda a lógica programação estará nessas instruções.
-- Toda sentença começa com um verbo em inglês: READ, MOVE, WRITE, ADD… , a única exceção para essa regra é a instrução que usamos para testar condições (IF).
-- Os nomes dos parágrafos devem ser codificados a partir da coluna 8 (área A) e terminar obrigatoriamente com um ponto. 
-- As sentenças devem ser codificadas a partir da coluna 12 (área B).
+###Procedure Division
+
+#### Introdução
+
+A **PROCEDURE DIVISION** é a última das quatro divisões de um programa COBOL e contém as instruções que serão executadas pelo programa. É nessa divisão que a lógica do programa é implementada, incluindo a leitura e escrita de arquivos, atribuição de valores a variáveis, operações aritméticas e controle de fluxo.
+
+#### Parágrafos e Sentenças
+
+- A **PROCEDURE DIVISION** é dividida em parágrafos, cada um com um nome único definido pelo programador.
+- Os nomes dos parágrafos devem começar na coluna 8 (Área A) e terminar com um ponto.
+- As sentenças (instruções) dentro dos parágrafos começam na coluna 12 (Área B).
+- Toda sentença começa com um verbo em inglês, como **READ**, **MOVE**, **WRITE**, **ADD**, exceto a instrução **IF**, usada para testar condições.
 - Apenas a última sentença de um parágrafo precisa de um ponto final.
-- A PROCEDURE DIVISION começa imediatamente depois da WORKINGSTORAGE SECTION, e como todas as divisões ela deve ser declarada a partir da coluna 8.
-#### Abertura de arquivos
-- Todo arquivo precisa ser “aberto” pelo programa para que possamos ler ou gravar registros nele. Qualquer operação de leitura ou escrita de registros num arquivo que não foi previamente aberto provocará um erro de execução que será sinalizado no file status correspondente.  A abertura de arquivos é comandada pela instrução OPEN, que tem o seguinte formato:
-'''
-OPEN modo nome-do-arquivo
-'''
-- O operador “modo” informa se vamos acessar o arquivo para leitura (INPUT) ou gravação (OUTPUT).
-- O “nome do arquivo” que aparece no comando OPEN deve ser igual ao nome informado na cláusula FD da FILE SECTION.
-- Existem outros modos possíveis nesse comando.
-- OPEN I-O: abre um arquivo para leitura e gravação; esse é o modo que nos permite, por exemplo, atualizar (REWRITE) os registros de um arquivo.
--  OPEN EXTEND nos permite inserir registros no final de um arquivo já existente.
-- É importante notar que OPEN I-O e OPEN EXTEND preservam o conteúdo existente no arquivo.
-- Já OPEN OUTPUT apaga todo o conteúdo existente e prepara o arquivo para a gravação de novos registros.
-- O COBOL permite que um único comando OPEN seja usado para abrir vários arquivos de leitura e gravação ao mesmo tempo:
-'''
-OPEN INPUT arquivo1 arquivo2 arquivo3 //(leitura)
-     OUTPUT arquivo4 arquivo5 arquivo6 //(gravacao)
-     I-O  arquivo6 arquivo7 arquivo8 // leitura e gravacao
 
+#### Programação Linear vs. Estruturada
 
+- **Programação Linear**: Parágrafos funcionam como rótulos (labels) para onde o fluxo de execução pode ser desviado usando **GO TO**. Esse estilo é considerado obsoleto e dificulta a manutenção do código.
+- **Programação Estruturada**: Parágrafos são usados como rotinas com finalidades específicas, sem o uso excessivo de **GO TO**. Isso melhora a legibilidade e a manutenção do código.
 
-'''
+#### Abertura de Arquivos
+
+- Antes de ler ou gravar em um arquivo, ele deve ser aberto com o comando **OPEN**.
+- O comando **OPEN** pode ser usado para abrir vários arquivos simultaneamente, especificando o modo de acesso:
+  - **INPUT**: Para leitura.
+  - **OUTPUT**: Para gravação (apaga o conteúdo existente).
+  - **I-O**: Para leitura e gravação (preserva o conteúdo existente).
+  - **EXTEND**: Para adicionar registros ao final do arquivo.
+
+Exemplo:
+```cobol
+OPEN INPUT arquivo1 OUTPUT arquivo2.
+```
+
+#### Leitura de Arquivos
+- O comando READ é usado para ler registros de um arquivo sequencial.
+- Cada execução de READ copia o próximo registro do arquivo para a área de memória definida na FILE SECTION.
+- O conteúdo do registro é armazenado em um item de grupo (nível 01) e seus itens elementares assumem os valores correspondentes.
+- Se o primeiro registro do arquivo for
+```
+11111122ABCDEF2015102520151125000000000012300QRTATV
+```
+- O registro inteiro será copiado para CRA0205-REGISTRO e, consequentemente, seus itens elementares assumirão os seguintes valores:
+```
+CRA0205-NR-FATURA = 111111
+CRA0205-NR-DUPLICATA = 22
+CRA0205-CD-CLIENTE = ABCDEF
+CRA0205-DT-EMISSAO = 20151025
+CRA0205-DT-VENCIMENTO = 20151125
+CRA0205-VL-FATURA = 123,00
+CRA0205-CD-CATEGORIA = QRT
+CRA0205-ST-DUPLICATA = ATV
+```
+#### Testando Condições com IF
+- O comando IF é usado para testar condições e executar comandos com base no resultado.
+- Pode ser usado com operadores como GREATER THAN, LESS THAN, EQUAL TO, e operadores lógicos AND e OR.
+- A cláusula END-IF é preferível ao ponto final para encerrar o bloco IF, especialmente em condições aninhadas.
+```
+IF CRA0205-ST-DUPLICATA NOT = "CNC"
+    MOVE CRA0205-NR-FATURA TO CRA0206-NR-FATURA
+    WRITE CRA0206-REGISTRO
+END-IF.
+```
+#### Atribuição de Valores com MOVE
+- O comando MOVE é usado para copiar valores entre variáveis ou atribuir literais e constantes figurativas (como ZEROS e SPACES) a variáveis.
+- O MOVE pode ser usado para preencher várias variáveis com um único comando.
+```
+MOVE "Teste" TO WT-NM-FASE.
+MOVE ZEROS TO WT-CT-LIDOS.
+```
+#### Exemplo de Programa
+- Um exemplo de programa COBOL que lê um arquivo de entrada, seleciona registros com base em uma condição e grava os registros selecionados em um arquivo de saída:
+```
+IDENTIFICATION DIVISION.
+PROGRAM-ID. CRP026.
+AUTHOR. PAULO ANDRE DIAS.
+DATE-WRITTEN. 23/12/2016.
+
+ENVIRONMENT DIVISION.
+INPUT-OUTPUT SECTION.
+FILE-CONTROL.
+    SELECT CRA0205 ASSIGN TO "../dat/cra0205.dat"
+    ORGANIZATION IS LINE SEQUENTIAL.
+    SELECT CRA0206 ASSIGN TO "../dat/cra0206.dat"
+    ORGANIZATION IS LINE SEQUENTIAL.
+
+DATA DIVISION.
+FILE SECTION.
+FD CRA0205.
+01 CRA0205-REGISTRO.
+    03 CRA0205-NR-FATURA     PIC 9(006).
+    03 CRA0205-NR-DUPLICATA  PIC 9(002).
+    03 CRA0205-CD-CLIENTE    PIC X(006).
+    03 CRA0205-DT-EMISSAO    PIC 9(008).
+    03 CRA0205-DT-VENCIMENTO PIC 9(008).
+    03 CRA0205-VL-FATURA     PIC S9(013)V9(002).
+    03 CRA0205-CD-CATEGORIA  PIC X(003).
+    03 CRA0205-ST-DUPLICATA  PIC X(003).
+
+FD CRA0206.
+01 CRA0206-REGISTRO.
+    03 CRA0206-NR-FATURA     PIC 9(006).
+    03 CRA0206-NR-DUPLICATA  PIC 9(002).
+    03 CRA0206-CD-CLIENTE    PIC X(006).
+    03 CRA0206-DT-EMISSAO    PIC 9(008).
+    03 CRA0206-DT-VENCIMENTO PIC 9(008).
+    03 CRA0206-VL-FATURA     PIC S9(013)V9(002).
+    03 CRA0206-CD-CATEGORIA  PIC X(003).
+    03 CRA0206-ST-DUPLICATA  PIC X(003).
+
+WORKING-STORAGE SECTION.
+01 WT-CONTADORES.
+    03 WT-CT-LIDOS      PIC 9(006) VALUE ZEROS.
+    03 WT-CT-GRAVADOS   PIC 9(006) VALUE ZEROS.
+
+PROCEDURE DIVISION.
+INICIO-DO-PROGRAMA.
+    OPEN INPUT CRA0205 OUTPUT CRA0206.
+    PERFORM LEIA-REGISTRO UNTIL WT-CT-LIDOS = 100.
+    CLOSE CRA0205 CRA0206.
+    STOP RUN.
+
+LEIA-REGISTRO.
+    READ CRA0205.
+    IF CRA0205-ST-DUPLICATA NOT = "CNC"
+        MOVE CRA0205-NR-FATURA TO CRA0206-NR-FATURA
+        MOVE CRA0205-NR-DUPLICATA TO CRA0206-NR-DUPLICATA
+        MOVE CRA0205-CD-CLIENTE TO CRA0206-CD-CLIENTE
+        MOVE CRA0205-DT-EMISSAO TO CRA0206-DT-EMISSAO
+        MOVE CRA0205-DT-VENCIMENTO TO CRA0206-DT-VENCIMENTO
+        MOVE CRA0205-VL-FATURA TO CRA0206-VL-FATURA
+        MOVE CRA0205-CD-CATEGORIA TO CRA0206-CD-CATEGORIA
+        MOVE CRA0205-ST-DUPLICATA TO CRA0206-ST-DUPLICATA
+        WRITE CRA0206-REGISTRO
+        ADD 1 TO WT-CT-GRAVADOS
+    END-IF.
+    ADD 1 TO WT-CT-LIDOS.
+```
