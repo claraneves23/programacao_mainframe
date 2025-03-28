@@ -5,7 +5,7 @@ Disciplina ministrada pelo professor Marcio André Ferreira Pereira
 Lattes:   http://lattes.cnpq.br/2800361122369298
 ## Aula 01
 ### Surgimento
-No iníncio dos anos 1960, a partir do incentivo do governo americano e do setor comercial foi desenvolvida a linguagem de programação COBOL que tinha como propósito ser uma linguagem universal e faciliar a manutenção e desenvolvimento de sistemas para ambientes comerciais.
+No início dos anos 1960, a partir do incentivo do governo americano e do setor comercial foi desenvolvida a linguagem de programação COBOL que tinha como propósito ser uma linguagem universal e faciliar a manutenção e desenvolvimento de sistemas para ambientes comerciais.
 
 COBOL surgiu como uma linguagem "autodocumentável", com sintaxe próxima ao inglês, e organizada em divisões, seções, parágrafos e sentenças, como em um texto comum.
 
