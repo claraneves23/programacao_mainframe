@@ -347,7 +347,7 @@ WORKING-STORAGE SECTION
 SPACES, que preenche a variável com espaços em branco.
 
 ## Aula 04
-###Procedure Division
+### Procedure Division
 
 #### Introdução
 
