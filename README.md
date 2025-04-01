@@ -376,7 +376,7 @@ A **PROCEDURE DIVISION** é a última das quatro divisões de um programa COBOL 
   - **EXTEND**: Para adicionar registros ao final do arquivo.
 
 Exemplo:
-```cobol
+```
 OPEN INPUT arquivo1 OUTPUT arquivo2.
 ```
 
@@ -483,4 +483,84 @@ LEIA-REGISTRO.
         ADD 1 TO WT-CT-GRAVADOS
     END-IF.
     ADD 1 TO WT-CT-LIDOS.
+```
+## Aula 05
+
+### Gravação de Registros em Arquivos de Saída
+- **Comando WRITE**: Utilizado para gravar registros em arquivos abertos em modo `OUTPUT`, `I-O`, ou `EXTEND`.
+  - Formato básico:  
+    ```
+    WRITE nome-do-registro
+    ```
+  - Alternativa com transferência de dados:  
+    ```
+    WRITE nome-do-registro FROM variável
+    ```
+    Equivalente a:  
+    ```
+    MOVE variável TO nome-do-registro
+    WRITE nome-do-registro
+    ```
+
+---
+
+### Operações Aritméticas
+COBOL utiliza verbos específicos para operações matemáticas: `ADD`, `SUBTRACT`, `DIVIDE`, `MULTIPLY`, e `COMPUTE`.
+
+#### **Tabela de Exemplos com `ADD`**
+| Antes (varX, varY, varZ) | Comando                     | Depois (varX, varY, varZ) |
+|--------------------------|-----------------------------|---------------------------|
+| 8, 7, 4                  | `ADD 3 TO varX`             | 11, 7, 4                  |
+| 8, 7, 4                  | `ADD varX varY TO varZ`     | 8, 7, 19                  |
+| 8, 7, 4                  | `ADD varX varY GIVING varZ` | 8, 7, 15                  |
+
+- **Cláusula `GIVING`**: Armazena o resultado em uma variável específica sem alterar os operandos originais.
+
+#### **Tabela de Exemplos com `SUBTRACT`**
+| Antes (varX, varY, varZ) | Comando                                | Depois (varX, varY, varZ) |
+|--------------------------|----------------------------------------|---------------------------|
+| 8, 3, 2                  | `SUBTRACT 3 FROM varX`                 | 5, 3, 2                   |
+| 8, 3, 2                  | `SUBTRACT varX FROM varY GIVING varZ`  | 8, 3, -5                  |
+
+#### **Comando `DIVIDE`**
+- Formatos principais:  
+  ```cobol
+  DIVIDE variável-X BY literal GIVING variável-Y
+
+#### **Comando`MULTIPLY`**
+| Antes (varX, varY, varZ) | Comando                           | Depois (varX, varY, varZ) |
+|--------------------------|----------------------------------|---------------------------|
+| 5, 10, 0                 | `MULTIPLY varX BY varY`          | 5, 50, 0                  |
+| 3, 4, 0                  | `MULTIPLY varX BY varY GIVING varZ` | 3, 4, 12              |
+| 2, 0, 0                  | `MULTIPLY 5 BY varX GIVING varY` | 2, 10, 0                  |
+
+> **Observação**: O resultado pode ser armazenado em um dos operandos ou em uma terceira variável usando `GIVING`.
+
+---
+
+#### **Comando `COMPUTE`**
+Permite fórmulas complexas com operadores `+`, `-`, `*`, `/`, `**`.
+
+##### **Exemplo**:
+```
+COMPUTE A = (B / C) + (D * (E + F)) - 6
+```
+
+#### **Desvios Incondicionais e Controle de Fluxo**
+- **Comando `GO TO`**: Usado para loops em programação linear.
+
+##### **Exemplo**:
+```
+LE-ARQUIVO.
+  READ arquivo AT END GO TO TERMINA-PROGRAMA.
+  ...
+  GO TO LE-ARQUIVO.
+````
+- Cláusula AT END: Detecta o fim do arquivo para encerrar o loop.
+
+#### Fechamento de Arquivos
+Comando CLOSE: Libera recursos e atualiza buffers.
+Exemplo:
+```
+CLOSE arquivo-1 arquivo-2.
 ```
