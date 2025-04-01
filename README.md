@@ -113,7 +113,7 @@ IDENTIFICATION DIVISION.
 PROGRAM-ID. CRP0206.
 AUTHOR. PAULO ANDRE DIAS.
 DATE-WRITTEN. 25/10/2015.
-REMERKS. SELECIONA DUPLICATAS ATIVAS
+REMARKS. SELECIONA DUPLICATAS ATIVAS
 ```
 #### Estrutura Final
 ```
@@ -124,7 +124,7 @@ INSTALLATION.   nome-da-empresa-dona-do-programa
 DATE-WRITTEN.    data-em-que-o-programa-foi-escrito
 DATE-COMPILED.   data-em-que-o-programa-foi-compilado
 SECURITY.        informações-sobre-acesso-ao-programa
-REMERKS.         comrntários-diversos.
+REMARKS.         comrntários-diversos.
 ```
 
 ### ENVIROMENT DIVISION
