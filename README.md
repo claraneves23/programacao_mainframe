@@ -124,7 +124,7 @@ INSTALLATION.   nome-da-empresa-dona-do-programa
 DATE-WRITTEN.    data-em-que-o-programa-foi-escrito
 DATE-COMPILED.   data-em-que-o-programa-foi-compilado
 SECURITY.        informações-sobre-acesso-ao-programa
-REMARKS.         comrntários-diversos.
+REMARKS.         comentários-diversos.
 ```
 
 ### ENVIROMENT DIVISION
