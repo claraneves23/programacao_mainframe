@@ -135,7 +135,7 @@ REMARKS.         comentários-diversos.
 #### CONFIGURATION SECTION
 - Fornece dados sobre a plataforma que será usada para compilar e executar o programa, além de permitir que o programador estabeleça alguns parâmetros para execução e compatibilidade. (ex: tipo de alfabeto, símbolo do valor monetário).
   
-- Porém, geralmente usamos esta seção apenas para substtituir o ponto decimal (padrão americano) pela vírgula decimal (padrão brasileiro). Para isso, codificamos a CONFIGURATION SECTION e um de seus parágrafos, SPECIAL-NAMES, com a sentença DECIMAL-POINT IS COMMA, como no exemplo abaixo:
+- Porém, geralmente usamos esta seção apenas para substituir o ponto decimal (padrão americano) pela vírgula decimal (padrão brasileiro). Para isso, codificamos a CONFIGURATION SECTION e um de seus parágrafos, SPECIAL-NAMES, com a sentença DECIMAL-POINT IS COMMA, como no exemplo abaixo:
 ```
 ENVIROMENT DIVISION.
 CONFIGURATION SECTION.
@@ -166,7 +166,7 @@ FILE-CONTROL.
     FILE STATUS IS WT-ST-CRA0206.
 ```
 - Haverá uma cláusula SELECT para cada arquivo acessado pelo programa.
-- É possível, definir o tipo de proteção (lock) que será usado para mpdificar registros, o modo como o arquivo será compartilhado, o método de acesso (sequencial ou randômico), e assim por diante.
+- É possível, definir o tipo de proteção (lock) que será usado para modificar registros, o modo como o arquivo será compartilhado, o método de acesso (sequencial ou randômico), e assim por diante.
 - O tipo de arquivo é definido pela cláusula ORGANIZATION.
 - Nesse exemplo, os dois arquivos são do tipo linear sequencial (semelhantes a arquivos de texto).
 - Nesse tipo de organização, os registros são separados por caracteres delimitadores. No Windows, CR e LF, e no Linux ou Unix, só LF.
@@ -236,12 +236,9 @@ pelo tamanho da variável.
 | S9(005)       | Variável numérica, com tamanho de 5 dígitos, que pode receber valores de -99999 a +99999.        |
 | S9(013)V9(002) | Variável numérica, com tamanho de 15 dígitos, sendo 13 para a parte inteira e 2 para a parte decimal. Pode receber valores de -9999999999999,99 a +9999999999999,99. |
 
-*O ponto ou vírgula decimal é apenas posicional: ele não ocupa espaço
-na variável.*
+*O ponto ou vírgula decimal é apenas posicional: ele não ocupa espaço na variável.*
 
-- Itens de grupo não possuem cláusula picture, uma vez que seu tipo,
-tamanho e formato será determinado pelo tipo, tamanho e formato dos
-seus itens elementares.
+- Itens de grupo não possuem cláusula picture, uma vez que seu tipo, tamanho e formato será determinado pelo tipo, tamanho e formato dos seus itens elementares.
 
 ```
 01 CONTA-RECEBER.
@@ -264,11 +261,8 @@ seus itens elementares.
 - Um item de grupo se comporta como uma variável alfanumérica (PIC X) cujo tamanho é igual à soma dos tamanhos de seus itens elementares.
   
 #### Detalhamento de arquivos convencionais
-- Todos os arquivos declarados na ENVIRONMENT DIVISION precisam ser
-detalhados na DATA DIVISION, numa seção específica chamada FILE
-SECTION.
-- A FILE SECTION deve ser declarada na coluna 8, logo depois do nome da
-divisão.
+- Todos os arquivos declarados na ENVIRONMENT DIVISION precisam ser detalhados na DATA DIVISION, numa seção específica chamada FILE SECTION.
+- A FILE SECTION deve ser declarada na coluna 8, logo depois do nome da divisão.
 - Para mostrar como os arquivos são detalhados, partiremos da ENVIRONMENT DIVISION que codificamos no tópico anterior:
 ```
 *=====================================================================*
@@ -294,8 +288,7 @@ FILE-CONTROL.
   FILE STATUS IS WT-ST-CRAB206.
 ```
 - Para detalhar esse arquivo, incluiremos um parágrafo de file description (FD) na FILE SECTION.
-- Dentro desse parágrafo colocaremos a definição do registro (um item de grupo com nível 01) e dentro do registro colocaremos as variáveis correspondentes a 
-cada campo
+- Dentro desse parágrafo colocaremos a definição do registro (um item de grupo com nível 01) e dentro do registro colocaremos as variáveis correspondentes a cada campo.
 ```
 *=====================================================================*
 DATA DIVISION.
@@ -343,8 +336,7 @@ WORKING-STORAGE SECTION
    03 WT-CT-GRAVADOS    PIC 9(006) VALUE ZEROS.
 ```
 - A constante figurativa ZEROS é autoexplicativa: indica que queremos que as variáveis sejam iniciadas com valor zero.
-- Para variáveis alfanuméricas normalmente usamos a constante figurativa
-SPACES, que preenche a variável com espaços em branco.
+- Para variáveis alfanuméricas normalmente usamos a constante figurativa SPACES, que preenche a variável com espaços em branco.
 
 ## Aula 04
 ### Procedure Division
@@ -523,9 +515,29 @@ COBOL utiliza verbos específicos para operações matemáticas: `ADD`, `SUBTRAC
 | 8, 3, 2                  | `SUBTRACT varX FROM varY GIVING varZ`  | 8, 3, -5                  |
 
 #### **Comando `DIVIDE`**
-- Formatos principais:  
-  ```cobol
-  DIVIDE variável-X BY literal GIVING variável-Y
+
+| Antes (varX, varY, varZ) | Comando                                      | Depois (varX, varY, varZ) | Explicação                                                                 |
+|--------------------------|---------------------------------------------|---------------------------|---------------------------------------------------------------------------|
+| 10, 3, 0                 | `DIVIDE varX BY varY GIVING varZ`           | 10, 3, 3                  | Divide varX (10) por varY (3), armazena resultado truncado em varZ (3.333→3) |
+| 10, 3, 0                 | `DIVIDE varX BY varY GIVING varZ ROUNDED`   | 10, 3, 3                  | Arredonda resultado (3.333→3) - igual ao truncado quando decimal < 0.5     |
+| 10, 4, 0                 | `DIVIDE varX BY varY GIVING varZ ROUNDED`   | 10, 4, 3                  | Arredonda 2.5 para 3 (decimal ≥ 0.5)                                      |
+| 10, 3, 0                 | `DIVIDE varX BY varY GIVING varZ REMAINDER varR` | 10, 3, 3 (varR=1)    | varZ=3 (quociente), varR=1 (resto)                                        |
+| 15, 5, 0                 | `DIVIDE varY INTO varX`                     | 3, 5, 0                   | Divide varX (15) por varY (5), resultado em varX (sobrescreve)            |
+| 10, 0, 0                 | `DIVIDE varX BY varY GIVING varZ ON SIZE ERROR MOVE -1 TO varZ` | 10, 0, -1 | Divisão por zero: executa ON SIZE ERROR (varZ=-1)                         |
+
+---
+
+*Cláusulas adicionais**: 
+   - `REMAINDER` (exclusivo de `DIVIDE`)
+   - `ON SIZE ERROR` (crítico para divisões por zero)
+
+### Exemplo COBOL com todas as cláusulas:
+```
+DIVIDE varX BY varY GIVING varZ ROUNDED REMAINDER varW
+   ON SIZE ERROR
+      DISPLAY "ERRO: DIVISÃO POR ZERO"
+END-DIVIDE
+```
 
 #### **Comando`MULTIPLY`**
 | Antes (varX, varY, varZ) | Comando                           | Depois (varX, varY, varZ) |
