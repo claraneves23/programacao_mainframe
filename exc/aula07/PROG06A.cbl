@@ -6,7 +6,7 @@
       ******************************************************************
        IDENTIFICATION DIVISION.
        PROGRAM-ID. PROG06A.
-       AUTHOR. MARIA CLARA PIRANI NEVES.
+       AUTHOR. JOAO VITOR VALE DA CRUZ.
        DATE-COMPILED. 25/04/2025.
        ENVIRONMENT DIVISION.
        DATA DIVISION.
